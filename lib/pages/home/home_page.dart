@@ -1,3 +1,4 @@
+import 'package:devnubank/pages/home/widgets/menu_app.dart';
 import 'package:devnubank/pages/home/widgets/my_app_bar.dart';
 import 'package:devnubank/pages/home/widgets/my_dots_app.dart';
 import 'package:devnubank/pages/home/widgets/page_view_app.dart';
@@ -24,8 +25,10 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     double _screenHeight = MediaQuery.of(context).size.height;
+    double _maxBottom = _screenHeight * .88;
+    double _maxTop = _screenHeight * .24;
     if (_yPosition == null) {
-      _yPosition = _screenHeight * .24;
+      _yPosition = _maxTop;
     }
     return Scaffold(
       backgroundColor: Colors.purple[800],
@@ -37,9 +40,14 @@ class _HomePageState extends State<HomePage> {
               onTap: () {
                 setState(() {
                   _showMenu = !_showMenu;
-                  _yPosition = _showMenu ? _screenHeight *  .75 : _screenHeight * .24;
+                  _yPosition =
+                      _showMenu ? _maxBottom : _maxTop;
                 });
               }),
+          MenuApp(
+            showMenu: _showMenu,
+            top: _screenHeight * .20,
+          ),
           PageViewApp(
             showMenu: _showMenu,
             top:
@@ -50,8 +58,8 @@ class _HomePageState extends State<HomePage> {
               });
             },
             onPanUpdate: (details) {
-              double positionBottomLimit = _screenHeight * .75;
-              double positionTopLimit = _screenHeight * .24;
+              double positionBottomLimit = _maxBottom;
+              double positionTopLimit = _maxTop;
               double midlePosition = positionBottomLimit - positionTopLimit;
               midlePosition = midlePosition * .5;
               setState(() {
@@ -83,7 +91,10 @@ class _HomePageState extends State<HomePage> {
               });
             },
           ),
-          MyDotsApp(top: _screenHeight * .70, currentIndex: _currentIndex)
+          MyDotsApp(
+              showMenu: _showMenu,
+              top: _screenHeight * .70,
+              currentIndex: _currentIndex)
         ],
       ),
     );
